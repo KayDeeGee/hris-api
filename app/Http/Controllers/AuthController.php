@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,4 +58,6 @@ class AuthController extends Controller
         }
         return 'wow';
     }
+
+    public function register(RegisterRequest $request) {}
 }
