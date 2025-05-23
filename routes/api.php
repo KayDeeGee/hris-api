@@ -4,9 +4,16 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// use if with middleware
+// Route::prefix('auth')->middleware('guest')->group(function () {
+//     Route::post('/login', [AuthController::class, 'login']);
+//     Route::apiResource('/register', AuthController::class);
+// });
 
-Route::post('/login', [AuthController::class, 'login']);
-
+Route::prefix('auth')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::apiResource('/register', AuthController::class);
+});
 
 Route::get('/user', function (Request $request) {
     return $request->user();
