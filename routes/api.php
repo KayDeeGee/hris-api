@@ -17,7 +17,7 @@ Route::prefix('auth')->group(function () {
     Route::apiResource('/register', AuthController::class);
 });
 
-Route::prefix('')->group(function () {
+Route::prefix('public')->group(function () {
     Route::apiResource('job-posts', JobPostController::class)->only(['index', 'show']);
 });
 

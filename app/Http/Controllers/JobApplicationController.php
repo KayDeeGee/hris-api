@@ -14,6 +14,7 @@ class JobApplicationController extends Controller
     public function index()
     {
         //
+        return JobApplication::all();
     }
 
     /**
@@ -22,6 +23,7 @@ class JobApplicationController extends Controller
     public function store(StoreJobApplicationRequest $request)
     {
         //
+
     }
 
     /**

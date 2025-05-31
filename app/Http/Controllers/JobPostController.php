@@ -42,6 +42,11 @@ class JobPostController extends Controller
     public function show(JobPost $jobPost)
     {
         //
+        if (!$jobPost) {
+            return response()->json(['message' => 'Job not found.'], 404);
+        }
+
+        return response()->json($jobPost);
     }
 
     /**
