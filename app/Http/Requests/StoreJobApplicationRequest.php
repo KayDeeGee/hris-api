@@ -17,12 +17,20 @@ class StoreJobApplicationRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<text, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            //
+            'cover_letter' => ['nullable', 'string'],
+            'resume_path' => ['nullable', 'string'],
+            'job_id' => ['required', 'exists:jobs,id'],
+
+            // Guest-only fields
+            'first_name' => ['required_without:user_id', 'string', 'max:255'],
+            'last_name'  => ['required_without:user_id', 'string', 'max:255'],
+            'email'      => ['required_without:user_id', 'email', 'max:255'],
+            'phone'      => ['nullable', 'string', 'max:20'],
         ];
     }
 }
