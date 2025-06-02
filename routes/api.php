@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobPostController;
-use App\Models\JobPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +19,7 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('public')->group(function () {
     Route::apiResource('job-posts', JobPostController::class)->only(['index', 'show']);
+    Route::apiResource('job-applications', JobApplicationController::class)->only(['store', 'show']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
