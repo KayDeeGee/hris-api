@@ -24,7 +24,7 @@ class StoreJobApplicationRequest extends FormRequest
         return [
             'cover_letter' => ['nullable', 'string'],
             'resume_path' => ['nullable', 'string'],
-            'job_id' => ['required', 'exists:jobs,id'],
+            'job_id' => ['required', 'exists:job_posts,id'],
 
             // Guest-only fields
             'first_name' => ['required_without:user_id', 'string', 'max:255'],

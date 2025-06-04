@@ -9,4 +9,13 @@ class JobApplication extends Model
 {
     /** @use HasFactory<\Database\Factories\JobApplicationFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'job_post_id',
+        'user_id',
+        'cover_letter',
+        'resume_path',
+        'status',
+        'applied_at',
+    ];
 }

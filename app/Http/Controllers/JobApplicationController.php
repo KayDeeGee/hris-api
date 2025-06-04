@@ -44,14 +44,14 @@ class JobApplicationController extends Controller
                     $user = auth()->user();
                 }
 
-                if ($data->hasFile('resume_path')) {
-                    $data['resume_path'] = $data->file('resume_path')->store('resumes', 'public');
-                }
+                // if ($data->hasFile('resume_path')) {
+                //     $data['resume_path'] = $data->file('resume_path')->store('resumes', 'public');
+                // }
 
                 // Create job application
                 $application = JobApplication::create([
                     'user_id' => $user->id,
-                    'job_id' => $data['job_id'],
+                    'job_post_id' => $data['job_id'],
                     'cover_letter' => $data['cover_letter'] ?? null,
                     'resume_path' => $data['resume_path'] ?? null,
                     'applied_at' => now(),
