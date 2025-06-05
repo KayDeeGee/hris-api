@@ -49,7 +49,7 @@ class JobApplicationController extends Controller
                 // }
 
                 // Create job application
-                $application = JobApplication::create([
+                return JobApplication::create([
                     'user_id' => $user->id,
                     'job_post_id' => $data['job_id'],
                     'cover_letter' => $data['cover_letter'] ?? null,
