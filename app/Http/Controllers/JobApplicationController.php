@@ -26,8 +26,9 @@ class JobApplicationController extends Controller
     public function store(StoreJobApplicationRequest $request)
     {
         $data = $request->validated();
+
         try {
-            $application = DB::transaction(function () use ($data) {
+            $application = DB::transaction(function () use ($request, $data) {
                 if (!auth()->check()) {
                     $user = User::firstOrCreate(
                         ['email' => $data['email']],
@@ -35,20 +36,19 @@ class JobApplicationController extends Controller
                             'first_name' => $data['first_name'],
                             'last_name' => $data['last_name'],
                             'phone' => $data['phone'] ?? null,
-                            'password' => null, // guest user
+                            'password' => null,
                         ]
                     );
-
                     $user->assignRole('applicant');
                 } else {
                     $user = auth()->user();
                 }
 
-                // if ($data->hasFile('resume_path')) {
-                //     $data['resume_path'] = $data->file('resume_path')->store('resumes', 'public');
-                // }
+                // ✅ Correct: check and handle file from $request
+                if ($request->hasFile('resume_path')) {
+                    $data['resume_path'] = $request->file('resume_path')->store('resumes', 'public');
+                }
 
-                // Create job application
                 return JobApplication::create([
                     'user_id' => $user->id,
                     'job_post_id' => $data['job_id'],
@@ -63,9 +63,13 @@ class JobApplicationController extends Controller
                 'application' => $application,
             ]);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An Error occured', 'error' => $e->getMessage()], 201);
+            return response()->json([
+                'message' => 'An error occurred.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
+
 
     /**
      * Display the specified resource.

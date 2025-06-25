@@ -23,7 +23,7 @@ class StoreJobApplicationRequest extends FormRequest
     {
         return [
             'cover_letter' => ['nullable', 'string'],
-            'resume_path' => ['nullable', 'string'],
+            'resume_path' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
             'job_id' => ['required', 'exists:job_posts,id'],
 
             // Guest-only fields
