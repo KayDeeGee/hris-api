@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\JobApplication;
 use App\Http\Requests\StoreJobApplicationRequest;
 use App\Http\Requests\UpdateJobApplicationRequest;
+use App\Models\Employee;
 use App\Models\User;
+use Endroid\QrCode\Builder\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Illuminate\Support\Facades\Storage;
 
 class JobApplicationController extends Controller
 {
@@ -16,8 +22,9 @@ class JobApplicationController extends Controller
      */
     public function index()
     {
-        //
-        return JobApplication::all();
+        $applications = JobApplication::with(['user', 'jobPost'])->where('status', 'pending')->get();
+
+        return response()->json($applications);
     }
 
     /**
@@ -93,5 +100,80 @@ class JobApplicationController extends Controller
     public function destroy(JobApplication $jobApplication)
     {
         //
+    }
+
+    public function updateStatus(JobApplication $jobApplication, Request $request)
+    {
+        $validated = $request->validate([
+            'status' => ['required', 'in:reviewed,shortlisted,hired,rejected']
+        ]);
+
+        DB::beginTransaction();
+
+        $jobApplication->update(['status' => $validated['status']]);
+
+        try {
+            $jobApplication->update(['status' => $validated['status']]);
+
+            if ($validated['status'] === 'hired') {
+                $this->createEmployee($jobApplication->user);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message' => "Application {$validated['status']} successfully.",
+                'application' => $jobApplication,
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => "Application {$validated['status']} successfully.",
+            'application' => $jobApplication,
+        ]);
+    }
+
+    private function createEmployee($user)
+    {
+        // Check if employee already exists
+        $existing = Employee::where('user_id', $user->id)->first();
+        if ($existing) return $existing;
+
+        $emp_no = $this->generateEmployeeNumber();
+        $qr_code_path = $this->generateQRCode($emp_no);
+
+        return Employee::create([
+            'user_id' => $user->id,
+            'employee_number' => $emp_no,
+            'qr_code_path' => $qr_code_path
+        ]);
+    }
+
+
+    private function generateEmployeeNumber()
+    {
+        $last = Employee::latest()->first();
+        $number = $last ? $last->id + 1 : 1;
+        return 'EMP-' . str_pad($number, 5, '0', STR_PAD_LEFT);
+    }
+
+    private function generateQRCode($emp_no)
+    {
+        $qrCode = new QrCode((string) $emp_no);
+        $writer = new PngWriter();
+
+        $result = $writer->write($qrCode);
+
+        $path = "qr_codes/employee_{$emp_no}.png";
+        Storage::disk('public')->put($path, $result->getString());
+
+        return $path;
     }
 }

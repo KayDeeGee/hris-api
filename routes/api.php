@@ -24,6 +24,7 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('hr')->group(function () {
     Route::apiResource('job-applications', JobApplicationController::class);
+    Route::post('/job-applications/{jobApplication}/status', [JobApplicationController::class, 'updateStatus']);
 });
 
 

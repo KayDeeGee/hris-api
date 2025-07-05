@@ -14,8 +14,10 @@ class JobPost extends Model
         'title',
         'description',
         'requirements',
+        'salary',
         'qualifications',
         'status',
+        'location',
         'created_by'
     ];
 
@@ -27,5 +29,10 @@ class JobPost extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class);
     }
 }
