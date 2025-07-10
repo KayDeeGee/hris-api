@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobPostController;
@@ -14,13 +15,17 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::prefix('public')->group(function () {
     Route::apiResource('job-posts', JobPostController::class)->only(['index', 'show']);
-    // Route::apiResource('job-applications', JobApplicationController::class)->only(['store', 'show']);
+    Route::apiResource('job-applications', JobApplicationController::class)->only(['store', 'show']);
+
+    Route::get('/attendance-logs/latest', [AttendanceLogController::class, 'latest']);
+    Route::apiResource('attendance-logs', AttendanceLogController::class);
 });
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::apiResource('/register', AuthController::class);
 });
+
 
 Route::prefix('hr')->group(function () {
     Route::apiResource('job-applications', JobApplicationController::class);
