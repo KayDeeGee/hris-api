@@ -12,7 +12,9 @@ class Employee extends Model
     protected $fillable = [
         'user_id',
         'employee_number',
+        'job_id',
         'qr_code_path',
+        'status',
     ];
 
     public function user(): BelongsTo
@@ -23,5 +25,10 @@ class Employee extends Model
     public function attendanceLogs(): HasMany
     {
         return $this->hasMany(AttendanceLog::class);
+    }
+
+    public function jobPost(): BelongsTo
+    {
+        return $this->belongsTo(JobPost::class);
     }
 }

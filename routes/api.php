@@ -4,6 +4,9 @@ use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\HR\EmployeeController as HR_EmployeeController;
+use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\LeaveTypeController;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,8 +31,12 @@ Route::prefix('auth')->group(function () {
 
 
 Route::prefix('hr')->group(function () {
-    Route::apiResource('job-applications', JobApplicationController::class);
     Route::post('/job-applications/{jobApplication}/status', [JobApplicationController::class, 'updateStatus']);
+    Route::apiResource('leave-types', LeaveTypeController::class);
+    Route::apiResource('leave-requests', LeaveRequestController::class);
+
+    Route::apiResource('employees', HR_EmployeeController::class);
+    Route::apiResource('job-applications', JobApplicationController::class);
 });
 
 
