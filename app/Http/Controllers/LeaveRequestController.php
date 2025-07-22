@@ -13,6 +13,9 @@ class LeaveRequestController extends Controller
     public function index()
     {
         //
+        $leaveRequests = LeaveRequest::with('leaveType')->orderByDesc('created_at')->get();
+
+        return response()->json($leaveRequests);
     }
 
     /**
