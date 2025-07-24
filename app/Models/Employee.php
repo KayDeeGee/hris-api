@@ -32,6 +32,11 @@ class Employee extends Model
 
     public function jobPost(): BelongsTo
     {
-        return $this->belongsTo(JobPost::class);
+        return $this->belongsTo(JobPost::class, 'job_id');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'employee_number';
     }
 }

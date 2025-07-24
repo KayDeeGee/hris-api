@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\HR;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateEmployeeBasicDetailsRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
@@ -60,10 +61,11 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateEmployeeBasicDetailsRequest $request, Employee $employee)
     {
-        //
+        $employee->update($request->validated());
 
+        return response()->json(['message' => 'Employee updated successfully']);
     }
 
     /**
