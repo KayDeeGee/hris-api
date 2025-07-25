@@ -39,4 +39,39 @@ class Employee extends Model
     {
         return 'employee_number';
     }
+
+    public function personalDetail()
+    {
+        return $this->hasOne(EmployeePersonalDetail::class);
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany(EmployeeContact::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(EmployeeAddress::class);
+    }
+
+    public function emergencyContacts()
+    {
+        return $this->hasMany(EmployeeEmergencyContact::class);
+    }
+
+    public function movements()
+    {
+        return $this->hasMany(EmployeeMovement::class);
+    }
+
+    public function manager()
+    {
+        return $this->hasOne(EmployeeReportsTo::class, 'employee_id');
+    }
+
+    public function subordinates()
+    {
+        return $this->hasMany(EmployeeReportsTo::class, 'manager_id');
+    }
 }

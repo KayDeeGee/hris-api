@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateEmployeeBasicDetailsRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -63,11 +64,30 @@ class EmployeeController extends Controller
      */
     public function update(UpdateEmployeeBasicDetailsRequest $request, Employee $employee)
     {
-        $employee->update($request->validated());
+        $validated = $request->validated();
 
-        return response()->json(['message' => 'Employee updated successfully']);
+        try {
+            DB::transaction(function () use ($validated, $employee) {
+                // Update only job_id in employee
+                if (isset($validated['job_id'])) {
+                    $employee->update(['job_id' => $validated['job_id']]);
+                }
+
+                // Update related user details
+                $employee->user->update([
+                    'first_name' => $validated['first_name'],
+                    'last_name' => $validated['last_name'],
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone'] ?? null,
+                    'status' => $validated['status'] ?? 'active',
+                ]);
+            });
+
+            return response()->json(['message' => 'Employee updated successfully']);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => 'Failed to update employee.'], 500);
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      */
