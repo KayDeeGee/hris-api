@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('employee_contacts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-
+            // $table->string('email')->unique();
             $table->enum('type', ['mobile', 'landline', 'email', 'work', 'other']);
             $table->string('value');
             $table->boolean('is_primary')->default(false);

@@ -16,10 +16,13 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
 
             $table->enum('type', ['current', 'permanent', 'other']);
-            $table->string('address_line');
-            $table->string('city')->nullable();
+            $table->string('region')->nullable();
             $table->string('province')->nullable();
-            $table->string('postal_code')->nullable();
+            $table->string('city')->nullable();
+            $table->string('barangay')->nullable();
+            $table->string('street')->nullable();
+            $table->string('house_number')->nullable();
+            $table->string('zip_code')->nullable();
             $table->string('country')->default('Philippines');
 
             $table->boolean('is_primary')->default(false);
