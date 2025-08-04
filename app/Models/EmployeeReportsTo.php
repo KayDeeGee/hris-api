@@ -10,6 +10,8 @@ class EmployeeReportsTo extends Model
     //
     use HasFactory;
 
+    protected $table = 'employee_reports_to';
+
     protected $fillable = [
         'employee_id',
         'manager_id',

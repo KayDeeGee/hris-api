@@ -65,9 +65,9 @@ class Employee extends Model
         return $this->hasMany(EmployeeMovement::class);
     }
 
-    public function manager()
+    public function managers()
     {
-        return $this->hasOne(EmployeeReportsTo::class, 'employee_id');
+        return $this->hasMany(EmployeeReportsTo::class, 'employee_id');
     }
 
     public function subordinates()
