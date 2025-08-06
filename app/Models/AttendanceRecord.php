@@ -21,7 +21,7 @@ class AttendanceRecord extends Model
     ];
 
     protected $casts = [
-        'date' => 'date',
+        'date' => 'date:Y-m-d',
         'time_in' => 'datetime:H:i:s',
         'time_out' => 'datetime:H:i:s',
         'total_hours' => 'decimal:2',

@@ -6,6 +6,7 @@ use App\Models\AttendanceRecord;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class AttendanceRecordSeeder extends Seeder
 {
@@ -38,8 +39,10 @@ class AttendanceRecordSeeder extends Seeder
 
             // Calculate late duration (if after 9:00 AM)
             $lateDuration = $timeIn->gt(Carbon::createFromTime(9, 0))
-                ? $timeIn->diffInMinutes(Carbon::createFromTime(9, 0)) / 60
+                ? Carbon::createFromTime(9, 0)->diffInMinutes($timeIn) / 60
                 : 0;
+
+            Log::info('Late Duration:', ['late_duration' => $lateDuration]);
 
             AttendanceRecord::create([
                 'employee_id' => $employeeId,

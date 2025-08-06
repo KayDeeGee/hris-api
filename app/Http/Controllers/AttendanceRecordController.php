@@ -12,7 +12,10 @@ class AttendanceRecordController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(
+            AttendanceRecord::orderBy('date', 'desc')
+                ->paginate(20)
+        );
     }
 
     /**
