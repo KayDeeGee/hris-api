@@ -12,7 +12,7 @@ class LeaveCredit extends Model
 
     protected $fillable = [
         'user_id',
-        'leave_type',
+        'leave_type_id',
         'total_credits',
         'used_credits',
         'year',
@@ -58,9 +58,9 @@ class LeaveCredit extends Model
     /**
      * Scope to get leave credits by type
      */
-    public function scopeByType($query, $type)
+    public function scopeByType($query, $typeId)
     {
-        return $query->where('leave_type', $type);
+        return $query->where('leave_type_id', $typeId);
     }
 
     /**
