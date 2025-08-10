@@ -39,6 +39,11 @@ class LeaveCredit extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function leaveType(): BelongsTo
+    {
+        return $this->belongsTo(LeaveType::class);
+    }
+
     /**
      * Scope to get active leave credits
      */

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('leave_credits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('leave_type_id')->constrained()->onDelete('cascade');; // vacation, sick, personal, etc.
+            $table->foreignId('leave_type_id')->constrained()->onDelete('cascade'); // vacation, sick, personal, etc.
             $table->integer('total_credits')->default(0); // Total allocated credits
             $table->integer('used_credits')->default(0); // Credits already used
             $table->integer('year'); // Year these credits apply to
@@ -26,7 +26,7 @@ return new class extends Migration
 
             // Add indexes for better performance
             $table->index(['user_id', 'year']);
-            $table->index(['user_id', 'leave_type']);
+            $table->index(['user_id', 'leave_type_id']);
             $table->index('is_active');
 
             $table->unique(['user_id', 'leave_type_id', 'year']);

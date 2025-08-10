@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\HR\EmployeeController as HR_EmployeeController;
+use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\LeaveTypeController;
 use Illuminate\Http\Request;
@@ -44,6 +45,10 @@ Route::prefix('hr')->group(function () {
     Route::apiResource('employees', HR_EmployeeController::class);
     Route::apiResource('job-applications', JobApplicationController::class);
     Route::apiResource('attendance-records', AttendanceRecordController::class);
+});
+
+Route::prefix('employee')->group(function () {
+    Route::apiResource('leaves', LeaveController::class);
 });
 
 

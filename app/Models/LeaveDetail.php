@@ -15,7 +15,7 @@ class LeaveDetail extends Model
 
     protected $casts = [
         'date' => 'date',
-        'length' => 'decimal:2', // 0.5 for half day, 1.0 for full day
+        // 'length' => 'decimal:2', // 0.5 for half day, 1.0 for full day
     ];
 
     public function leaveRequest(): BelongsTo
