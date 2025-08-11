@@ -14,7 +14,7 @@ class LeaveDetail extends Model
     ];
 
     protected $casts = [
-        'date' => 'date',
+        // 'date' => 'date',
         // 'length' => 'decimal:2', // 0.5 for half day, 1.0 for full day
     ];
 

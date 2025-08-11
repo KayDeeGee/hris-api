@@ -17,19 +17,6 @@ class LeaveController extends Controller
         // $userId = Auth::id();
         $userId = 10;
 
-        // 1️⃣ Get credits summary
-        $credits = LeaveCredit::where('user_id', $userId)
-            ->with('leaveType') // if you want leave type names
-            ->get()
-            ->map(function ($credit) {
-                return [
-                    'leave_type'     => $credit->leaveType->name ?? null,
-                    'total_credits'  => $credit->total_credits,
-                    'used_credits'   => $credit->used_credits,
-                    'remaining'      => $credit->total_credits - $credit->used_credits,
-                ];
-            });
-
         // 2️⃣ Get paginated leave requests
         $leaveRequests = LeaveRequest::where('employee_id', $userId) // adjust if employee_id != user_id
             ->with(['leaveType', 'leaveDetails'])
@@ -37,7 +24,7 @@ class LeaveController extends Controller
             ->paginate(10);
 
         return response()->json([
-            'credits' => $credits,
+            'credits' => $this->leaveCreditSummary($userId),
             'requests' => $leaveRequests,
         ]);
     }
@@ -71,5 +58,24 @@ class LeaveController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+
+    public function leaveCreditSummary($userId)
+    {
+        $creditsSummary = LeaveCredit::where('user_id', $userId)
+            ->selectRaw('
+        SUM(total_credits) as total_credits,
+        SUM(used_credits) as used_credits,
+        SUM(total_credits - used_credits) as remaining
+    ')
+            ->first();
+
+        return [
+            'total_credits' => (int) $creditsSummary->total_credits,
+            'used_credits'  => (int) $creditsSummary->used_credits,
+            'remaining'     => (int) $creditsSummary->remaining,
+        ];
     }
 }
