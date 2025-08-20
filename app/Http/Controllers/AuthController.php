@@ -35,7 +35,7 @@ class AuthController extends Controller
             });
             return response()->json(['message' => 'Account has been created!'], 201);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An Error occured', 'error' => $e->getMessage()], 201);
+            return response()->json(['message' => 'An Error occured', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -68,8 +68,13 @@ class AuthController extends Controller
         $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Login Success'], 201);
+            $request->session()->regenerate(); // ✅ prevent session fixation
+
+            return response()->json([
+                'message' => 'Login success',
+                'user' => Auth::user(),
+            ], 200);
         }
-        return 'wow';
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
 }
