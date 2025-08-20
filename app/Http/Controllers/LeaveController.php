@@ -17,15 +17,9 @@ class LeaveController extends Controller
         // $userId = Auth::id();
         $userId = 10;
 
-        // 2️⃣ Get paginated leave requests
-        $leaveRequests = LeaveRequest::where('employee_id', $userId) // adjust if employee_id != user_id
-            ->with(['leaveType', 'leaveDetails'])
-            ->latest()
-            ->paginate(10);
-
         return response()->json([
             'credits' => $this->leaveCreditSummary($userId),
-            'requests' => $leaveRequests,
+            'requests' => $this->leaveRequestSummary($userId)
         ]);
     }
     /**
@@ -60,16 +54,24 @@ class LeaveController extends Controller
         //
     }
 
+    public function leaveRequestSummary($userId)
+    {
+        $leaveRequests = LeaveRequest::where('employee_id', $userId) // adjust if employee_id != user_id
+            ->with(['leaveType', 'leaveDetails'])
+            ->latest()
+            ->paginate(10);
 
+        return $leaveRequests;
+    }
 
     public function leaveCreditSummary($userId)
     {
         $creditsSummary = LeaveCredit::where('user_id', $userId)
             ->selectRaw('
-        SUM(total_credits) as total_credits,
-        SUM(used_credits) as used_credits,
-        SUM(total_credits - used_credits) as remaining
-    ')
+                SUM(total_credits) as total_credits,
+                SUM(used_credits) as used_credits,
+                SUM(total_credits - used_credits) as remaining
+            ')
             ->first();
 
         return [

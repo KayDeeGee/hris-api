@@ -7,8 +7,11 @@ use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\HR\EmployeeController as HR_EmployeeController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\LeaveCreditController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\OvertimeRequestController;
+use App\Models\OvertimeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -49,6 +52,8 @@ Route::prefix('hr')->group(function () {
 
 Route::prefix('employee')->group(function () {
     Route::apiResource('leaves', LeaveController::class);
+    Route::apiResource('leave-credits', LeaveCreditController::class);
+    Route::apiResource('overtime', OvertimeRequestController::class);
 });
 
 

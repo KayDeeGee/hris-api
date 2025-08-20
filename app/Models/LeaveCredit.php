@@ -23,8 +23,6 @@ class LeaveCredit extends Model
     ];
 
     protected $casts = [
-        'valid_from' => 'date',
-        'valid_until' => 'date',
         'is_active' => 'boolean',
         'total_credits' => 'integer',
         'used_credits' => 'integer',
